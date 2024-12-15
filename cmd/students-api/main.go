@@ -12,11 +12,20 @@ import (
 
 	"github.com/sagar-pardhi/students-api/internal/config"
 	"github.com/sagar-pardhi/students-api/internal/http/handlers/student"
+	"github.com/sagar-pardhi/students-api/internal/storage/sqlite"
 )
 
 func main() {
 	// load config
 	cfg := config.MustLoad()
+
+	_, err := sqlite.New(cfg)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	slog.Info("storage initialized", slog.String("env", cfg.Env), slog.String("version", "1.0.0"))
 
 	router := http.NewServeMux()
 
